@@ -181,6 +181,49 @@ class CutChar(object):
         return res
 
 
+class GetSample(object):
+    def __init__(self, char2vec, holder_dim, half_size):
+        self.char2vec = char2vec
+        self.holder_dim = holder_dim
+        self.half_size = half_size
+
+    def get_sample_interrupt(self, cut_words, inx):
+        # sample = list()
+        # interrupt = False
+        # for offset in range(self.half_size):
+        #     ch = cut_words[inx - offset]
+        #     if '<SYM>' == ch:
+        #         interrupt = True
+        #
+        #     if not interrupt:
+        #         vec = self.char2vec.char2vec(ch)
+        #     else:
+        #         vec = [0] * self.holder_dim
+        pass
+
+    def get_sample(self, cut_words, inx):
+        inputs = list()
+        short_text = list()
+        for offset in range(self.half_size):
+            ch = cut_words[inx - offset - 1]
+            vec = self.char2vec.char2vec(ch)
+            inputs.append(vec)
+            short_text.append(ch)
+
+        inputs.reverse()
+        short_text.reverse()
+
+        for offset in range(self.half_size):
+            ch = cut_words[inx + offset + 1]
+            vec = self.char2vec.char2vec(ch)
+            inputs.append(vec)
+            short_text.append(ch)
+
+        ch = cut_words[inx]
+        vec = self.char2vec.char2vec(ch)
+        return [inputs, vec, short_text, ch]
+
+
 def test1():
     objCutChar = CutChar()
     # objChar2Vec = Char2Vec(restart_info=True)

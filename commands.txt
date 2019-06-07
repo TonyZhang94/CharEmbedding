@@ -1,0 +1,5 @@
+tensorboard --logdir=result\{version}
+
+version
+1559803794 1000
+1559804726 10000
