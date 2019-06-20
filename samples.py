@@ -129,4 +129,8 @@ if __name__ == '__main__':
     from CharEmbedding.settings import *
 
     # make_1000()
-    make_10000()
+    # make_10000()
+
+    train, dev, test = load_data()
+    for line in test:
+        print(line)

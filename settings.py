@@ -11,6 +11,6 @@ clip_grad = 5.0
 
 result_dir = "result/"
 summaries_path = "result/{}/summaries/"
-checkpoints_path = "result/{}/checkpoints/model"
+checkpoints_path = "result/{}/checkpoints/"
 result_path = "result/{}/checkpoints/results"
 log_path = "result/{}/checkpoints/results/log.txt"

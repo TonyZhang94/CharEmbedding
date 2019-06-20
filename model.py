@@ -159,21 +159,29 @@ class EncoderModel(object):
 
 
 if __name__ == '__main__':
-    x = tf.constant([[[1, 2, 1, 2, 1, 2], [1, 2, 1, 2, 1, 2], [1, 2, 1, 2, 1, 2]],
-                     [[3, 4, 3, 4, 3, 4], [3, 4, 3, 4, 3, 4], [3, 4, 3, 4, 3, 4]],
-                     [[5, 6, 5, 6, 5, 6], [5, 6, 5, 6, 5, 6], [5, 6, 5, 6, 5, 6]],
-                     [[7, 8, 7, 8, 7, 8], [7, 8, 7, 8, 7, 8], [7, 8, 7, 8, 7, 8]]], dtype=tf.float32)
+    x = tf.constant([[[1, 2, 1, 2, 1, 2, 1], [1, 2, 1, 2, 1, 2, 2], [1, 2, 1, 2, 1, 2, 3]],
+                     [[3, 4, 3, 4, 3, 4, 1], [3, 4, 3, 4, 3, 4, 2], [3, 4, 3, 4, 3, 4, 3]],
+                     [[5, 6, 5, 6, 5, 6, 1], [5, 6, 5, 6, 5, 6, 2], [5, 6, 5, 6, 5, 6, 3]],
+                     [[7, 8, 7, 8, 7, 8, 1], [7, 8, 7, 8, 7, 8, 2], [7, 8, 7, 8, 7, 8, 3]]], dtype=tf.float32)
     shape1 = tf.shape(x)
     output = tf.reduce_sum(x, 1)
     shape2 = tf.shape(output)
 
     softmax = tf.nn.softmax(output)
 
+    output3 = tf.slice(x, [0, 2, 0], [4, 1, 7])
+    output3 = tf.reshape(output3, [-1, 7])
+    shape3 = tf.shape(output3)
+
     init_op = tf.global_variables_initializer()
     with tf.Session() as sess:
         sess.run(init_op)
-        shape1, output, shape2, softmax = sess.run([shape1, output, shape2, softmax])
+        shape1, output, shape2, softmax, output3, shape3 = sess.run([shape1, output, shape2, softmax,
+                                                                     output3, shape3])
         print(shape1)
         print(output)
         print(shape2)
         print(softmax)
+        print("====================")
+        print(output3)
+        print(shape3)

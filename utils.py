@@ -9,7 +9,8 @@ class Char2Vec(object):
         digits = [str(n) for n in range(10)] + ['A', 'B', 'C', 'D', 'E', 'F']
         self.digits2num = {digits[num]: num for num in range(16)}
         self.digits2num.update({'a': 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15})
-        self.special = {'<ENG>': 0xA000, '<SYM>': 0xA001, '<NUM>': 0xA002, '<UNK>': 0xA003, '<MASK>': 0xA004}
+        self.special = {'<ENG>': 0xA000, '<SYM>': 0xA001, '<NUM>': 0xA002, '<UNK>': 0xA003, '<MASK>': 0xA004,
+                        '<BLANK>': 0xA007}
 
         self.start = 0x4e00
         self.end = 0x9fff
@@ -37,20 +38,26 @@ class Char2Vec(object):
                 vec[pos] = 1
                 self.__char2vec[k] = vec
         else:
-            with open("char2info/char2pos.pkl", mode="rb") as fp:
+            with open("../CharEmbedding/char2info/char2pos.pkl", mode="rb") as fp:
                 self.__char2pos = pickle.load(fp)
+                for key, pos in self.special.items():
+                    self.__char2pos[key] = pos - self.start
 
-            with open("char2info/char2vec.pkl", mode="rb") as fp:
+            with open("../CharEmbedding/char2info/char2vec.pkl", mode="rb") as fp:
                 self.__char2vec = pickle.load(fp)
+                for key, pos in self.special.items():
+                    vec = [0] * self.size
+                    vec[pos - self.start] = 1
+                    self.__char2vec[key] = vec
 
             print("load info size:", len(self.__char2pos))
 
     def dump_info(self):
-        with open("char2info/char2pos.pkl", mode="wb") as fp:
+        with open("../CharEmbedding/char2info/char2pos.pkl", mode="wb") as fp:
             pickle.dump(self.__char2pos, fp)
         del self.__char2pos
 
-        with open("char2info/char2vec.pkl", mode="wb") as fp:
+        with open("../CharEmbedding/char2info/char2vec.pkl", mode="wb") as fp:
             pickle.dump(self.__char2vec, fp)
         del self.__char2vec
 
@@ -100,7 +107,7 @@ class CutChar(object):
     @staticmethod
     def load_symbols():
         symbols = set()
-        with open("char2info/symbols.txt", mode="r", encoding="utf-8") as fp:
+        with open("../CharEmbedding/char2info/symbols.txt", mode="r", encoding="utf-8") as fp:
             for line in fp.readlines():
                 symbols.add(line.strip())
 

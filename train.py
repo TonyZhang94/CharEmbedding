@@ -14,7 +14,7 @@ def run():
         init_embedding = pickle.load(fp)
 
     timestamp = str(int(time.time()))
-    output_path = result_dir+timestamp
+    output_path = result_dir + timestamp
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
@@ -27,7 +27,7 @@ def run():
                          clip_grad=clip_grad,
                          init_embedding=init_embedding,
                          summaries_path=summaries_path.format(timestamp),
-                         checkpoints_path=checkpoints_path.format(timestamp)
+                         checkpoints_path=checkpoints_path.format(timestamp)+"model"
                          )
     model.train(train, dev)
     # PredictModel.test(test)
